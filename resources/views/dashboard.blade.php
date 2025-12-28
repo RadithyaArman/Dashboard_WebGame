@@ -14,4 +14,7 @@
             </div>
         </div>
     </div>
+
+    <h1 class="text-blue-800">Dashboard</h1>
+
 </x-app-layout>

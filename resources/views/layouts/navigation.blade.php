@@ -6,7 +6,8 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        {{-- <x-application-logo class="block h-9 w-auto fill-current text-gray-800" /> --}}
+                        <h1 class="font-bold text-2xl text-gray-800">SUBJEK</h1>
                     </a>
                 </div>
 
@@ -14,6 +15,12 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('games.index')" :active="request()->routeIs('games.*')">
+                        {{ __('Games') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('genres.index')" :active="request()->routeIs('genres.*')">
+                        {{ __('Genres') }}
                     </x-nav-link>
                 </div>
             </div>

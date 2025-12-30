@@ -18,7 +18,7 @@
         <div class="flex bg-gray-200">
             @include('layouts.sidebar')
 
-            <div class="flex flex-1 flex-col">
+            <div class="flex flex-1 flex-col h-screen overflow-hidden overflow-y-auto">
                 <!-- Page Heading -->
                 @include('layouts.header')
 

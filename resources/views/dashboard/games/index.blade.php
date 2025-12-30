@@ -5,11 +5,55 @@
         </h2>
     </x-slot>
 
-@foreach ($games as $game)
-    <div>
-        {{ $game->title }}
-        <a href="{{ route('games.edit', $game) }}">Edit</a>
+    <div class="overflow-x-auto bg-white p-2 rounded">
+        {{ $games->appends(request()->query())->links() }}
+        <table class="min-w-full text-sm border">
+            <thead class="bg-gray-50">
+                <tr class="text-left text-gray-600">
+                    <th class="px-6 py-3 border w-12">No.</th>
+                    <th class="px-6 py-3 border w-48">Cover</th>
+                    <th class="px-6 py-3 border">Title</th>
+                    <th class="px-6 py-3 border w-32">Developer & Publisher</th>
+                    <th class="px-6 py-3 border">Rating</th>
+                    <th class="px-6 py-3 border">Edit/Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($games as $g)
+                <tr class="border">
+                    <td class="border px-6 py-3 text-center">
+                        {{ $games->firstItem() + $loop->index }}.
+                    </td>
+                    <td class="px-6 py-3 flex justify-center">
+                        <img src="{{ $g->cover ?? asset('img/placeholder_game.png') }}" alt="{{ $g->title }}" class="w-24 object-cover rounded">
+                    </td>
+                    <td class="border px-6 py-3 font-medium">
+                        {{ $g->title }}
+                    </td>
+                    <td class="border px-6 py-3">
+                        {{ $g->developer }} <br>
+                        <span class="text-gray-500 text-xs">
+                            {{ $g->publisher }}
+                        </span>
+                    </td>
+                    <td class="border px-6 py-3 text-center">
+                        {{ $g->rating ?? '-' }}/10⭐
+                    </td>
+                    <td class="border px-6 py-3">
+                        <a href="{{ route('games.edit', $g) }}" class="text-blue-600 hover:underline">
+                            Edit
+                        </a>
+                        <form method="POST" action="{{ route('games.destroy', $g) }}" onsubmit="return confirm('Delete this game?')">
+                            @csrf
+                            @method('DELETE')
+                            <button class="text-red-600 hover:underline">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                @endforeach
+            </tbody>
+        </table>
     </div>
-@endforeach
-
 </x-app-layout>
+{{-- <a href="{{ route('games.edit', $game) }}">Edit</a> --}}

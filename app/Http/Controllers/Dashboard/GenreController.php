@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Genre;
 use Illuminate\Http\Request;
 
 class GenreController extends Controller
@@ -12,7 +13,8 @@ class GenreController extends Controller
      */
     public function index()
     {
-        //
+        $genres = Genre::latest()->paginate(12);
+        return view('dashboard.genres.index', compact('genres'));
     }
 
     /**

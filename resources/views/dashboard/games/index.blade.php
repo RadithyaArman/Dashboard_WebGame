@@ -6,7 +6,17 @@
     </x-slot>
 
     <div class="overflow-x-auto bg-white p-2 rounded">
-        {{ $games->appends(request()->query())->links() }}
+        <div class="flex justify-between my-4">
+            {{ $games->appends(request()->query())->links() }}
+            <div class="flex space-x-16 mr-2">
+                <form action="">
+                    <input type="text" placeholder="Search..." name="search" class="h-8 text-sm rounded">
+                </form>
+                <a href="{{ route('games.create') }}" class="hover:bg-black/5 px-2 py-0 text-blue-600 text-3xl hover:text-blue-800">
+                   +
+                </a>
+            </div>
+        </div>
         <table class="min-w-full text-sm border">
             <thead class="bg-gray-50">
                 <tr class="text-left text-gray-600">

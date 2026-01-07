@@ -5,7 +5,7 @@
 
 @if ($paginator->hasPages())
 
-    <nav class="mb-4">
+    <nav class="">
         <ul class="flex items-center gap-1">
 
             {{-- Prev --}}

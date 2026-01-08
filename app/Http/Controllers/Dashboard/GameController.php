@@ -16,10 +16,30 @@ class GameController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $games = Game::paginate(2);
+        $query = Game::query();
+
+        // Search
+        if($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        // Sort
+        if($request->sort === 'asc') {
+            $query->orderBy('title', 'asc');
+        } elseif($request->sort === 'desc') {
+            $query->orderBy('title', 'desc');
+        } else {
+            $query->latest();
+        }
+
+        $games = $query->paginate(3)->withQueryString();
+
         return view('dashboard.games.index', compact('games'));
+
+        // $games = Game::paginate(2);
+        // return view('dashboard.games.index', compact('games'));
     }
 
     /**

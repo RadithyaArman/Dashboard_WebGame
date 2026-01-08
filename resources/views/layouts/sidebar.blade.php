@@ -23,7 +23,7 @@
   </nav>
 
   {{-- User --}}
-  <div class="p-4 border-t border-gray-700">
+  <div class="p-4 border-t border-gray-700 space-y-2">
     <div class="mb-2 text-sm">
       {{ Auth::user()->name }}
     </div>

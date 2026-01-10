@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Game;
+use App\Models\Genre;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -18,10 +19,11 @@ class GameController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Game::query();
+        $query = Game::with('genres');
+        $genres = Genre::all();
 
         // Search
-        if($request->filled('search')) {
+        if($request->search) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
@@ -36,10 +38,11 @@ class GameController extends Controller
 
         $games = $query->paginate(3)->withQueryString();
 
-        return view('dashboard.games.index', compact('games'));
+        if($request->ajax()) {
+            return view('dashboard.games.table.tablegames', compact('games'))->render();
+        }
 
-        // $games = Game::paginate(2);
-        // return view('dashboard.games.index', compact('games'));
+        return view('dashboard.games.index', compact('games', 'genres'));
     }
 
     /**
@@ -47,7 +50,9 @@ class GameController extends Controller
      */
     public function create()
     {
-        return view('dashboard.games.create');
+        $genres = Genre::orderBy('name')->get();
+
+        return view('dashboard.games.create', compact('genres'));
     }
 
     /**
@@ -56,12 +61,28 @@ class GameController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => 'required',
-            'rating' => 'nullable|numeric',
+            'title' => 'required|string|max:255',
+            'cover' => 'nullable|url',
+            'rating' => 'required|numeric|min:0|max:10',
+            'developer' => 'required|string|max:255',
+            'publisher' => 'required|string|max:255',
+            'description' => 'required|string',
+            'genres'=> 'required|array',
+            'genres.*'=> 'exists:genres,id',
         ]);
 
-        Game::create($data);
-        return redirect()->route('games.index');
+        if($request->hasFile('cover')) {
+            $data['cover'] = $request->file('cover')->store('cover', 'public');
+        }
+
+        $game = Game::create($data);
+
+        if($request->filled('genres')) {
+            $game->genres()->attach($request->genres);
+        }
+
+        
+        return redirect()->route('games.index')->with('success', 'Game added successfully!');
     }
 
     /**

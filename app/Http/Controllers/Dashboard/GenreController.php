@@ -31,7 +31,7 @@ class GenreController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.genres.create');
     }
 
     /**
@@ -39,7 +39,13 @@ class GenreController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:100|unique:genres,name',
+        ]);
+
+        Genre::create($data);
+
+        return redirect()->route('genres.index')->with('success', 'Genre added!');
     }
 
     /**
@@ -53,24 +59,36 @@ class GenreController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Genre $genre)
     {
-        //
+        return view('dashboard.genres.edit', compact('genre'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Genre $genre)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:100|unique:genres,name,' . $genre->id,
+        ]);
+
+        $genre->update($data);
+
+        return redirect()->route('genres.index')->with('success', 'Genre updated!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Genre $genre)
     {
-        //
+        if($genre->games()->exists()) {
+            return back()->with('error', 'Game genre is still in use!');
+        }
+
+        $genre->delete();
+
+        return back()->with('success', 'Genre successfully deleted.');
     }
 }

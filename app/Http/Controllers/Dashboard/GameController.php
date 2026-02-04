@@ -133,6 +133,6 @@ class GameController extends Controller
     {
         $game->genres()->detach();
         $game->delete();
-        return back();
+        return back()->with('success', 'Game successfully deleted.');
     }
 }

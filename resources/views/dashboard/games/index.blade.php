@@ -27,6 +27,16 @@
                 </a>
             </div>
         </div>
+        @if(session('success'))
+            <div class="bg-green-100 text-green-700 px-4 py-2 rounded mb-3">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if(session('error'))
+            <div class="bg-red-100 text-red-700 px-4 py-2 rounded mb-3">
+                {{ session('error') }}
+            </div>
+        @endif
         <div id="gameTable">
             @include('dashboard.games.table.tablegames')
         </div>

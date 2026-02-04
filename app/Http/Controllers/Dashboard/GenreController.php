@@ -8,12 +8,21 @@ use Illuminate\Http\Request;
 
 class GenreController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $genres = Genre::latest()->paginate(12);
+        $query = Genre::withCount('games');
+
+        $genres = $query->orderBy('name')->paginate(10)->withQueryString();
+
+        // $genres = Genre::latest()->paginate(12);
         return view('dashboard.genres.index', compact('genres'));
     }
 

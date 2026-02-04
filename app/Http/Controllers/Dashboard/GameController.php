@@ -71,9 +71,9 @@ class GameController extends Controller
             'genres.*'=> 'exists:genres,id',
         ]);
 
-        if($request->hasFile('cover')) {
-            $data['cover'] = $request->file('cover')->store('cover', 'public');
-        }
+        // if($request->hasFile('cover')) {
+        //     $data['cover'] = $request->file('cover')->store('cover', 'public');
+        // }
 
         $game = Game::create($data);
 
@@ -98,7 +98,10 @@ class GameController extends Controller
      */
     public function edit(Game $game)
     {
-        return view('dashboard.games.edit', compact('game'));
+        $game->load('genres');
+        $genres = Genre::orderBy('name')->get();
+
+        return view('dashboard.games.edit', compact('game', 'genres'));
     }
 
     /**
@@ -106,8 +109,21 @@ class GameController extends Controller
      */
     public function update(Request $request, Game $game)
     {
-        $game->update($request->all());
-        return redirect()->route('games.index');
+        $data = $request->validate([
+            'title' => 'required',
+            'cover' => 'nullable|url',
+            'rating' => 'required',
+            'developer' => 'required',
+            'publisher' => 'required',
+            'description' => 'required',
+            'genres' => 'array',
+        ]);
+
+        $game->update($data);
+
+        $game->genres()->sync($request->genres ?? []);
+
+        return redirect()->route('games.index')->with('success', 'Game update!');
     }
 
     /**

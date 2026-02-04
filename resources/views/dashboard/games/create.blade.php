@@ -69,18 +69,18 @@
 
       <div class="">
         <label>Cover :</label>
-        <input type="url" name="cover" class="w-full border rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
+        <input type="url" name="cover" value="{{ old('cover') }}" class="w-full border rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
       </div>
 
       <div class="flex gap-2 pt-4">
         <button type="submit"
           class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
-          Simpan
+          Save
         </button>
 
         <a href="{{ route('games.index') }}"
           class="px-4 py-2 border rounded">
-          Batal
+          Cancel
         </a>
       </div>
     </div>
